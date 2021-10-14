@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masinos</title>
     <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.css" type="text/css">
     <script src="./index.js" defer></script>
 </head>
 
@@ -20,17 +20,16 @@
                 <input id="model" type="text" placeholder="Modelis">
                 <input id="date" type="date" placeholder="Pagaminimo data">
                 <input id="color" type="text" placeholder="Spalva">
-                <input id="fuel" list="fuel" name="fuelTypes" placeholder="Kuro tipas">
-                <datalist id="fuel">
-                    <option value="${Dyzelinas}">
-                    <option value="${Benzinas}">
-                </datalist>
+                <select name="kuras" id="fuel">
+                    <option value="0">Dyzelinas</option>
+                    <option value="1">Benzinas</option>
+                </select>
 
                 <button id="save" type="button">Prideti</button>
             </form>
         </div>
 
-        <div class="form hide" id="update_car">
+        <!-- <div class="form hide" id="update_car">
             <form>
                 <input id="model" type="text" placeholder="Modelis">
                 <input id="date" type="date" placeholder="Pagaminimo data">
@@ -43,7 +42,7 @@
 
                 <button class="save" type="button">Atnaujinti</button>
             </form>
-        </div>
+        </div> -->
 
     </div>
 
