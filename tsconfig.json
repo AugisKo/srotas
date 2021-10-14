@@ -1,0 +1,8 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "strict": true,
+        "strictNullChecks": true,
+        "target": "ES6"
+    }
+}
