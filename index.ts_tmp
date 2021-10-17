@@ -1,0 +1,124 @@
+// apsirasom kuro tipus
+enum FuelType {
+    Benzinas = "Benzinas",
+    Dyzelinas = "Dyzelinas",
+    Hibridas = "Hibridas",
+}
+
+class CarsList {
+    // pridedam auto i bendra sarasa
+    addCar(car: Car): void {
+        cars.push(car);
+    }
+
+    //tikrinam, kokio tipo kuras pasirinktas
+    isFuelTypeSet(fuel: string): FuelType {
+        let kuras: FuelType = FuelType.Benzinas;
+
+        if (fuel === "0") {
+            kuras = FuelType.Benzinas;
+        }
+
+        if (fuel === "1") {
+            kuras = FuelType.Dyzelinas;
+        }
+        if (fuel === "2") {
+            kuras = FuelType.Hibridas;
+        }
+        return kuras;
+        //console.log(kuras);
+    }
+}
+
+// kuriam automobilio duomenu sablona
+class Car {
+    public readonly model: string;
+    public readonly date: Date;
+    public readonly color: string;
+    public readonly fuel: FuelType;
+    public readonly cars: Car[];
+
+    constructor(model: string, date: string, color: string, fuel: FuelType) {
+        this.model = model;
+        this.date = new Date(date);
+        this.color = color;
+        this.fuel = fuel;
+        this.cars = [];
+
+    }
+
+    public printData(element?: HTMLElement): void {
+        const dateFull = formatDate(JSON.stringify(this.date.toString()));
+        const dateNoTime = dateFull.split(',')[0];
+        console.log(dateNoTime);
+
+        if (element) {
+            element.innerHTML += `
+            <div class="card">
+                <div class="controls">
+                    <img class="icon edit" src="https://cdn-icons-png.flaticon.com/512/4277/4277132.png">
+                    <img class="icon delete" src="https://cdn-icons-png.flaticon.com/512/1617/1617543.png">
+                </div>
+                <div class="details">
+                    <div>${this.model}</div>
+                    <div>${dateNoTime}</div>
+                    <div>${this.color}</div>
+                    <div>${this.fuel}</div>
+                </div>
+            </div>`;
+        }
+    }
+}
+
+const CARS_LOCAL_STORAGE_KEY = "cars";
+
+const UI = {
+    modelInput: document.getElementById("model") as HTMLInputElement,
+    dateInput: document.getElementById("date") as HTMLInputElement,
+    colorInput: document.getElementById("color") as HTMLInputElement,
+    fuelSelect: document.getElementById("fuel") as HTMLSelectElement,
+    fuelOption: document.getElementById("fuel") as HTMLOptionElement,
+    saveButton: document.getElementById("save") as HTMLButtonElement,
+    allCars: document.querySelector<HTMLDivElement>(".list") as HTMLDivElement,
+}
+
+let cars: Car[] = [];
+const autoPark = new CarsList;
+
+UI.saveButton?.addEventListener("click", () => {
+    const model = UI.modelInput.value;
+    const date = UI.dateInput.value;
+    const color = UI.colorInput.value;
+    //const fuel = UI.fuelOption.value;
+    const fuel = UI.fuelSelect.value;
+
+    console.log("Mygtukas paspaustas!");
+
+    const typeOfFuel = autoPark.isFuelTypeSet(fuel);  //randam tinkama pasirinkta kuro tipa
+    const newCar = new Car(model, date, color, typeOfFuel)
+
+    cars.push(newCar)
+    console.log(cars);
+    display();
+});
+
+// spausdina auto info HTML lenteleje
+function display(): void {
+    UI.allCars.innerHTML = "";
+    for (const car of cars) {
+        car.printData(UI.allCars);
+        console.log("***show data***");
+    }
+}
+// datos formatavimo funkcija
+function formatDate(date: string) {
+    const df = new Date(date);
+    const newDateFormat = [df.getFullYear(), df.getMonth() + 1, df.getDate()].join(' ');
+    return newDateFormat.toLocaleString();
+}
+
+// funkcija saraso saugojimui lokalioje atmintyje (local storage)
+function saveCars(): void {
+    const carsString = JSON.stringify(autoPark);
+    window.localStorage.setItem('CARS_LOCAL_STORAGE_KEY', carsString)
+}
